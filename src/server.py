@@ -2,7 +2,7 @@ import socket
 
 # Configurar el servidor
 HOST = 'localhost'
-PORT = 8000
+PORT = 12345
 
 # Crear un socket TCP/IP
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
