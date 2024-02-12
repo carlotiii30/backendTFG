@@ -1,5 +1,5 @@
 import json
-from imagenes import imagenes
+from imagenes import Imagenes
 import base64
 
 """
@@ -7,47 +7,40 @@ Clase que maneja las peticiones del cliente
 """
 
 
-class server_handler:
+class Manejador:
     """
     Constructor de la clase
-    :param client_socket: socket - Socket del cliente
+    :param socket: socket - Socket del cliente
     """
-    def __init__(self, client_socket):
-        self.client_socket = client_socket
+    def __init__(self, socket):
+        self.socket = socket
 
     """
     Método que maneja la petición del cliente
     """
-    def handle(self):
-        with self.client_socket:
-            data = self.client_socket.recv(1024).decode()
+    def manejar(self):
+        with self.socket:
+            data = self.socket.recv(1024).decode()
             try:
                 request = json.loads(data)
                 command = request.get("command")
-                params = request.get("params", {})
                 text = request.get("text", "")
 
-                if command == "generate_image":
+                if command == "generar_imagen":
                     if text == "":
                         # Genera la imagen y conviértela en una cadena base64
-                        image_bytes = imagenes.generar_imagen_random()
+                        image_bytes = Imagenes.generar_imagen_random()
                         image_base64 = base64.b64encode(image_bytes).decode('utf-8')
 
                     else:
                         # Genera la imagen y conviértela en una cadena base64
-                        image_bytes = imagenes.generar_imagen(text)
+                        image_bytes = Imagenes.generar_imagen(text)
                         image_base64 = base64.b64encode(image_bytes).decode('utf-8')
 
                     response = {
                         "status": "success",
                         "message": "Imagen generada correctamente",
                         "image": image_base64,
-                    }
-
-                elif command == "suma":
-                    response = {
-                        "status": "success",
-                        "result": params.get("a", 0) + params.get("b", 0),
                     }
 
                 else:
@@ -69,6 +62,6 @@ class server_handler:
                 }
 
             try:
-                self.client_socket.sendall(json.dumps(response).encode())
+                self.socket.sendall(json.dumps(response).encode())
             except Exception as e:
                 print(f"Error al enviar la respuesta al cliente: {str(e)}")

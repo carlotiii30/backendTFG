@@ -2,7 +2,7 @@ import random
 from PIL import Image
 import io
 
-class imagenes:
+class Imagenes:
 
     def generar_imagen_random():
         # Generar una imagen aleatoria

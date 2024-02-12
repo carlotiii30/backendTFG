@@ -1,4 +1,4 @@
-from server import Server
+from servidor import Servidor
 
-server = Server('localhost', 12345)
+server = Servidor('localhost', 12345)
 server.start()
