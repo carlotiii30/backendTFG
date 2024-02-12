@@ -1,29 +1,38 @@
 import socket
+import threading
+from server_handler import server_handler
 
-# Configurar el servidor
-HOST = 'localhost'
-PORT = 12345
+"""
+Clase que representa un servidor que escucha en un puerto y maneja las conexiones de los clientes
+"""
+class Server:
+    """
+    Constructor de la clase
+    :param host: str - Dirección IP o nombre del host donde escuchará el servidor
+    :param port: int - Puerto donde escuchará el servidor
+    """
+    def __init__(self, host, port):
+        self.host = host
+        self.port = port
 
-# Crear un socket TCP/IP
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
-    try:
-        # Vincular el socket a la dirección y el puerto especificados
-        server_socket.bind((HOST, PORT))
-        # Escuchar conexiones entrantes
-        server_socket.listen()
-
-        print("Esperando conexiones entrantes en el puerto", PORT)
-
-        # Aceptar la conexión entrante
-        client_socket, client_address = server_socket.accept()
-
-        with client_socket:
-            print('Conexión establecida desde', client_address)
+    """
+    Método que inicia el servidor
+    """
+    def start(self):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
+            server_socket.bind((self.host, self.port))
+            server_socket.listen()
+            print(f"Servidor escuchando en el puerto {self.port}")
             while True:
-                # Recibir datos del cliente
-                data = client_socket.recv(1024)
-                if not data:
-                    break
-                print('Mensaje recibido:', data.decode())
-    except Exception as e:
-        print("Error en el servidor:", e)
+                client_socket, _ = server_socket.accept()
+                threading.Thread(
+                    target=self.handle_client, args=(client_socket,)
+                ).start()
+
+    """
+    Método que maneja la conexión con un cliente
+    :param client_socket: socket - Socket del cliente
+    """
+    def handle_client(self, client_socket):
+        handler = server_handler(client_socket)
+        handler.handle()
