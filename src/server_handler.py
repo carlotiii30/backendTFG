@@ -1,4 +1,6 @@
 import json
+from imagenes import imagenes
+import base64
 
 """
 Clase que maneja las peticiones del cliente
@@ -23,12 +25,23 @@ class server_handler:
                 request = json.loads(data)
                 command = request.get("command")
                 params = request.get("params", {})
+                text = request.get("text", "")
 
                 if command == "generate_image":
-                    # Aquí iría la lógica para generar la imagen
+                    if text == "":
+                        # Genera la imagen y conviértela en una cadena base64
+                        image_bytes = imagenes.generar_imagen_random()
+                        image_base64 = base64.b64encode(image_bytes).decode('utf-8')
+
+                    else:
+                        # Genera la imagen y conviértela en una cadena base64
+                        image_bytes = imagenes.generar_imagen(text)
+                        image_base64 = base64.b64encode(image_bytes).decode('utf-8')
+
                     response = {
                         "status": "success",
                         "message": "Imagen generada correctamente",
+                        "image": image_base64,
                     }
 
                 elif command == "suma":
@@ -49,4 +62,13 @@ class server_handler:
                     "message": "Error al decodificar el JSON",
                 }
 
-            self.client_socket.sendall(json.dumps(response).encode())
+            except Exception as e:
+                response = {
+                    "status": "error",
+                    "message": f"Error: {str(e)}",
+                }
+
+            try:
+                self.client_socket.sendall(json.dumps(response).encode())
+            except Exception as e:
+                print(f"Error al enviar la respuesta al cliente: {str(e)}")
