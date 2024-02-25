@@ -1,24 +1,27 @@
 import json
-from imagenes import Imagenes
+from modelo.imagenes import Images
 import base64
+from modelo.procesamiento import Texto
 
 """
 Clase que maneja las peticiones del cliente
 """
 
 
-class Manejador:
+class Handler:
     """
     Constructor de la clase
     :param socket: socket - Socket del cliente
     """
+
     def __init__(self, socket):
         self.socket = socket
 
     """
     Método que maneja la petición del cliente
     """
-    def manejar(self):
+
+    def handle(self):
         with self.socket:
             data = self.socket.recv(1024).decode()
             try:
@@ -29,18 +32,30 @@ class Manejador:
                 if command == "generar_imagen":
                     if text == "":
                         # Genera la imagen y conviértela en una cadena base64
-                        image_bytes = Imagenes.generar_imagen_random()
-                        image_base64 = base64.b64encode(image_bytes).decode('utf-8')
+                        image_bytes = Images.generate_random()
+                        image_base64 = base64.b64encode(image_bytes).decode("utf-8")
 
                     else:
                         # Genera la imagen y conviértela en una cadena base64
-                        image_bytes = Imagenes.generar_imagen(text)
-                        image_base64 = base64.b64encode(image_bytes).decode('utf-8')
+                        image_bytes = Images.generate(text)
+                        image_base64 = base64.b64encode(image_bytes).decode("utf-8")
 
                     response = {
                         "status": "success",
                         "message": "Imagen generada correctamente",
                         "image": image_base64,
+                    }
+
+                elif command == "procesar_texto":
+                    # Procesa el texto
+                    text, tokens, representacion_numerica = Texto.procesar_texto(text)
+
+                    response = {
+                        "status": "success",
+                        "message": "Texto procesado correctamente",
+                        "text": text,
+                        "tokens": tokens,
+                        "representacion_numerica": representacion_numerica,
                     }
 
                 else:

@@ -1,11 +1,11 @@
 import socket
 import threading
-from manejador import Manejador
+from conexion.manejador import Handler
 
 """
 Clase que representa un servidor que escucha en un puerto y maneja las conexiones de los clientes
 """
-class Servidor:
+class Server:
     """
     Constructor de la clase
     :param host: str - Dirección IP o nombre del host donde escuchará el servidor
@@ -19,20 +19,20 @@ class Servidor:
     Método que inicia el servidor
     """
     def start(self):
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as socket_servidor:
-            socket_servidor.bind((self.host, self.port))
-            socket_servidor.listen()
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
+            server_socket.bind((self.host, self.port))
+            server_socket.listen()
             print(f"Servidor escuchando en el puerto {self.port}")
             while True:
-                socket_cliente, _ = socket_servidor.accept()
+                client_socket, _ = server_socket.accept()
                 threading.Thread(
-                    target=self.manejador_cliente, args=(socket_cliente,)
+                    target=self.client_handler, args=(client_socket,)
                 ).start()
 
     """
     Método que maneja la conexión con un cliente
-    :param socket_cliente: socket - Socket del cliente
+    :param client_socket: socket - Socket del cliente
     """
-    def manejador_cliente(self, socket_cliente):
-        manejador = Manejador(socket_cliente)
-        manejador.manejar()
+    def client_handler(self, client_socket):
+        handler = Handler(client_socket)
+        handler.handle()
