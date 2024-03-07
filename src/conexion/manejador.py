@@ -1,7 +1,10 @@
 import json
+
+import numpy as np
 from modelo.imagenes import Images
 import base64
 from modelo.procesamiento import Texto
+from gan.generador import Generador
 
 """
 Clase que maneja las peticiones del cliente
@@ -30,20 +33,20 @@ class Handler:
                 text = request.get("text", "")
 
                 if command == "generar_imagen":
-                    if text == "":
-                        # Genera la imagen y conviértela en una cadena base64
-                        image_bytes = Images.generate_random()
-                        image_base64 = base64.b64encode(image_bytes).decode("utf-8")
+                    imagen = Images.generate_random()
+                    imagen64 = base64.b64encode(imagen).decode()
 
-                    else:
-                        # Genera la imagen y conviértela en una cadena base64
-                        image_bytes = Images.generate(text)
-                        image_base64 = base64.b64encode(image_bytes).decode("utf-8")
+                    gen_model = Generador(100, (32, 32, 3))
+                    image = Images.generate_image(gen_model.model, 1)
+
+                    image_array = np.array(image)
+                    image_json = image_array.tolist()
+
 
                     response = {
                         "status": "success",
                         "message": "Imagen generada correctamente",
-                        "image": image_base64,
+                        "image": image_json,
                     }
 
                 elif command == "procesar_texto":

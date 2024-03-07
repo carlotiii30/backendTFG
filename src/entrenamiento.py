@@ -17,5 +17,5 @@ class Traininig:
             print(f'Iteración: {i + 1}, Accuracy real: {real_acc * 100}, Accuracy fake: {fake_acc * 100}')
 
 dataset = Dataset('cifar10')
-model = Discriminator((32, 32, 3))
-Traininig.train_discriminator(model, dataset)
+#model = Discriminator((32, 32, 3))
+#Traininig.train_discriminator(model, dataset)

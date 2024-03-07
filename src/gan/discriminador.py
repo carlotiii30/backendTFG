@@ -1,13 +1,7 @@
 # Discriminador de la GAN
 
-# Entrada: 1 imagen
-# Salida: 1 valor entre 0 y 1 (probabilidad de que la imagen sea real)
-
-# Convolución: ReLU
-# Salida: Sigmoide
-
 from keras.layers import Conv2D, Flatten, Dropout, LeakyReLU, Dense
-from keras.models import Sequential, Model
+from keras.models import Sequential
 from keras.optimizers import Adam
 
 # Clase del discriminador
