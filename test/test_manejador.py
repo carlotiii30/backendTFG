@@ -1,15 +1,13 @@
+import unittest
 from src.conexion.manejador import Handler
 import json
-import pytest
+from unittest import mock
 
-class TestHandler:
+class TestHandler(unittest.TestCase):
 
     # Handler receives valid JSON request with "generar_imagen" command and generates a random image and returns it as a base64 encoded string
-    def test_generar_imagen_random(self, mocker):
-        # Mock the socket object
-        mock_socket = mocker.Mock()
-        # Create a Handler instance
-        handler = Handler(mock_socket)
+    @mock.patch('src.conexion.manejador.Handler.handle')
+    def test_generar_imagen_random(self, mock_handle):
         # Create a valid JSON request with "generar_imagen" command
         request = {
             "command": "generar_imagen"
@@ -17,8 +15,12 @@ class TestHandler:
         # Convert the request to JSON string
         request_json = json.dumps(request)
         # Set the return value of socket.recv() to the request JSON string
+        mock_socket = mock.Mock()
         mock_socket.recv.return_value.decode.return_value = request_json
+        mock_handle.return_value = None
 
+        # Create a Handler instance
+        handler = Handler(mock_socket)
         # Invoke the handle() method of the Handler instance
         handler.handle()
 
@@ -26,15 +28,12 @@ class TestHandler:
         mock_socket.sendall.assert_called_with(json.dumps({
             "status": "success",
             "message": "Imagen generada correctamente",
-            "image": mocker.ANY,
+            "image": mock.ANY,
         }).encode())
 
     # Handler receives valid JSON request with "generar_imagen" command and generates an image using a fake model with n_samples=0
-    def test_generar_imagen_fake_model_n_samples_0(self, mocker):
-        # Mock the socket object
-        mock_socket = mocker.Mock()
-        # Create a Handler instance
-        handler = Handler(mock_socket)
+    @mock.patch('src.conexion.manejador.Handler.handle')
+    def test_generar_imagen_fake_model_n_samples_0(self, mock_handle):
         # Create a valid JSON request with "generar_imagen" command and n_samples=0
         request = {
             "command": "generar_imagen",
@@ -43,8 +42,12 @@ class TestHandler:
         # Convert the request to JSON string
         request_json = json.dumps(request)
         # Set the return value of socket.recv() to the request JSON string
+        mock_socket = mock.Mock()
         mock_socket.recv.return_value.decode.return_value = request_json
+        mock_handle.return_value = None
 
+        # Create a Handler instance
+        handler = Handler(mock_socket)
         # Invoke the handle() method of the Handler instance
         handler.handle()
 
@@ -52,5 +55,8 @@ class TestHandler:
         mock_socket.sendall.assert_called_with(json.dumps({
             "status": "success",
             "message": "Imagen generada correctamente",
-            "image": mocker.ANY,
+            "image": mock.ANY,
         }).encode())
+
+if __name__ == '__main__':
+    unittest.main()

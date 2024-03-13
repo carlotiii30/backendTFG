@@ -1,5 +1,4 @@
 import json
-
 import numpy as np
 from modelo.imagenes import Images
 import base64
