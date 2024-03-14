@@ -8,7 +8,7 @@ run: ## Run server
 	python ./src/main.py
 
 run_test: ## Run tests
-	python ./test/test.py
+	export PYTHONPATH=/Users/carlota/Documents/GitHub/backendTFG/src && pytest -v
 
 requirements: ## Generate requirements file
 	pip freeze > requirements.txt

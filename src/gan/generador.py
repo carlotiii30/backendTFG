@@ -1,6 +1,6 @@
 # Generador de la GAN
 
-from keras.layers import Dense, Reshape, Conv2DTranspose, LeakyReLU, BatchNormalization, Conv2D
+from keras.layers import Dense, Reshape, Conv2DTranspose, LeakyReLU, Conv2D
 from keras.models import Sequential
 
 

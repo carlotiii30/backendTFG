@@ -32,33 +32,45 @@ class Handler:
                 text = request.get("text", "")
 
                 if command == "generar_imagen":
-                    imagen = Images.generate_random()
-                    imagen64 = base64.b64encode(imagen).decode()
+                    """imagen = Images.generate_random()
+                    imagen64 = base64.b64encode(imagen).decode()"""
 
-                    gen_model = Generador(100, (32, 32, 3))
-                    image = Images.generate_image(gen_model.model, 1)
+                    try:
+                        gen_model = Generador(100, (32, 32, 3))
+                        image = Images.generate_image(gen_model.model, 1)
+                        image = (image * 255).astype(np.uint8)
+                        imagen64 = base64.b64encode(image).decode()
 
-                    image_array = np.array(image)
-                    image_json = image_array.tolist()
+                        response = {
+                            "status": "success",
+                            "message": "Imagen generada correctamente",
+                            "image": imagen64,
+                        }
 
-
-                    response = {
-                        "status": "success",
-                        "message": "Imagen generada correctamente",
-                        "image": image_json,
-                    }
+                    except Exception as e:
+                        response = {
+                            "status": "error",
+                            "message": f"Error al generar la imagen: {str(e)}",
+                        }
 
                 elif command == "procesar_texto":
-                    # Procesa el texto
-                    text, tokens, representacion_numerica = Texto.procesar_texto(text)
 
-                    response = {
-                        "status": "success",
-                        "message": "Texto procesado correctamente",
-                        "text": text,
-                        "tokens": tokens,
-                        "representacion_numerica": representacion_numerica,
-                    }
+                    try:
+                        # Procesa el texto
+                        text, tokens, representacion_numerica = Texto.procesar_texto(text)
+
+                        response = {
+                            "status": "success",
+                            "message": "Texto procesado correctamente",
+                            "text": text,
+                            "tokens": tokens,
+                            "representacion_numerica": representacion_numerica,
+                        }
+                    except Exception as e:
+                        response = {
+                            "status": "error",
+                            "message": f"Error al procesar el texto: {str(e)}",
+                        }
 
                 else:
                     response = {
