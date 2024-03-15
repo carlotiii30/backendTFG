@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 from src.gan.discriminador import Discriminator
-'''
+
 class TestDiscriminador(unittest.TestCase):
     def setUp(self):
         self.input_shape = (32, 32, 3)
@@ -10,7 +10,7 @@ class TestDiscriminador(unittest.TestCase):
     def test_model_structure(self):
         model = self.discriminador.model
         self.assertIsNotNone(model)
-
+'''
     def test_discriminate_real_images(self):
         n_samples = 5
         real_images = np.random.randn(n_samples, *self.input_shape)

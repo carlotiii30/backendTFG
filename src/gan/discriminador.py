@@ -39,7 +39,7 @@ class Discriminator:
         model.add(Dense(1, activation="sigmoid"))
 
         # Optimizador
-        optimizer = Adam(lr=0.0002, beta_1=0.5)
+        optimizer = Adam(learning_rate=0.0002, beta_1=0.5)
 
         # Compilar el modelo
         model.compile(loss="binary_crossentropy", optimizer=optimizer, metrics=["accuracy"])
@@ -48,3 +48,6 @@ class Discriminator:
 
     def summary(self):
         return self.model.summary()
+
+    def evaluate(self, x, y):
+        return self.model.evaluate(x, y)

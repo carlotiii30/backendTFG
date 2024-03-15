@@ -22,13 +22,13 @@ class TestGenerador(unittest.TestCase):
         # Entrena el generador durante varias épocas y verifica la estabilidad del entrenamiento
         # Puedes utilizar datos de entrenamiento simulados o un conjunto de datos real
         # Verifica la pérdida generativa y la calidad de las imágenes generadas en cada época
-        return 0
+        return None
 
     def test_generalization(self):
         # Evalúa la capacidad de generalización del generador
         # Alimenta el generador con ruido aleatorio no visto durante el entrenamiento
         # Verifica la calidad de las imágenes generadas y su similitud con las imágenes reales
-        return 0
+        return None
 
 if __name__ == '__main__':
     unittest.main()
