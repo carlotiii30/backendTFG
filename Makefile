@@ -8,7 +8,7 @@ run: ## Run server
 	python -m ./src/main.py
 
 run_test: ## Run tests
-	export PYTHONPATH=/Users/carlota/Documents/GitHub/backendTFG/src && pytest -v
+	python -m unittest discover -s test
 
 requirements: ## Generate requirements file
 	pip freeze > requirements.txt
@@ -18,6 +18,3 @@ install: ## Install dependencies
 
 update:
 	pip install --upgrade -r requirements.txt
-
-test:
-	python -m unittest discover -s test
