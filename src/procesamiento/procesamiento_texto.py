@@ -1,14 +1,34 @@
-# Procesamiento de texto
 from textblob import TextBlob
 import re
 
-class Texto:
-    def procesar_texto(texto):
-        # Preprocesamiento del texto
-        texto = re.sub(r'[^\w\s]', '', texto)   # Eliminar caracteres especiales
-        texto = texto.lower()                   # Convertir a minúsculas
 
-        tokens = TextBlob(texto).words          # Tokenización
+class Texto:
+    """Clase que proporciona funciones para procesar texto.
+
+    Esta clase contiene métodos para realizar operaciones de preprocesamiento y representación de texto.
+
+    """
+
+    @staticmethod
+    def procesar_texto(texto):
+        """Procesa un texto dado.
+
+        Realiza operaciones de preprocesamiento, tokenización y representación del texto.
+
+        Args:
+            texto (str): El texto a procesar.
+
+        Returns:
+            str: El texto preprocesado.
+            list: Lista de tokens obtenidos del texto.
+            dict: Representación numérica del texto utilizando one-hot encoding.
+        """
+        # Preprocesamiento del texto
+        texto = re.sub(r"[^\w\s]", "", texto)  # Eliminar caracteres especiales
+        texto = texto.lower()  # Convertir a minúsculas
+
+        # Tokenización
+        tokens = TextBlob(texto).words
 
         # Representación del texto (one-hot encoding)
         vocabulario = set(tokens)

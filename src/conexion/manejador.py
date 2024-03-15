@@ -5,25 +5,25 @@ import base64
 from src.procesamiento.procesamiento_texto import Texto
 from src.gan.generador import Generador
 
-"""
-Clase que maneja las peticiones del cliente
-"""
-
-
 class Handler:
-    """
-    Constructor de la clase
-    :param socket: socket - Socket del cliente
+    """Clase que maneja las peticiones del cliente.
+
+    Esta clase maneja las peticiones enviadas por el cliente y ejecuta las acciones correspondientes.
+
+    Attributes:
+        socket (socket): Socket del cliente.
     """
 
     def __init__(self, socket):
+        """Constructor de la clase.
+
+        Args:
+            socket: Socket del cliente.
+        """
         self.socket = socket
 
-    """
-    Método que maneja la petición del cliente
-    """
-
     def handle(self):
+        """Método que maneja la petición del cliente."""
         with self.socket:
             data = self.socket.recv(1024).decode()
             try:
@@ -32,10 +32,8 @@ class Handler:
                 text = request.get("text", "")
 
                 if command == "generar_imagen":
-                    """imagen = Images.generate_random()
-                    imagen64 = base64.b64encode(imagen).decode()"""
-
                     try:
+                        # Genera la imagen utilizando el modelo Generador
                         gen_model = Generador(100, (32, 32, 3))
                         image = Images.generate_image(gen_model.model, 1)
                         image = (image * 255).astype(np.uint8)
@@ -54,9 +52,8 @@ class Handler:
                         }
 
                 elif command == "procesar_texto":
-
                     try:
-                        # Procesa el texto
+                        # Procesa el texto utilizando la clase Texto
                         text, tokens, representacion_numerica = Texto.procesar_texto(text)
 
                         response = {

@@ -16,5 +16,5 @@ requirements: ## Generate requirements file
 install: ## Install dependencies
 	pip install -r requirements.txt
 
-update:
+update: ## Update dependencies
 	pip install --upgrade -r requirements.txt
