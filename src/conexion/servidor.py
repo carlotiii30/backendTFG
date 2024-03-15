@@ -1,6 +1,6 @@
 import socket
 import threading
-from conexion.manejador import Handler
+from src.conexion.manejador import Handler
 
 """
 Clase que representa un servidor que escucha en un puerto y maneja las conexiones de los clientes

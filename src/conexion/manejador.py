@@ -1,9 +1,9 @@
 import json
 import numpy as np
-from modelo.imagenes import Images
+from src.prueba.imagenes import Images
 import base64
-from modelo.procesamiento import Texto
-from gan.generador import Generador
+from src.procesamiento.procesamiento_texto import Texto
+from src.gan.generador import Generador
 
 """
 Clase que maneja las peticiones del cliente
