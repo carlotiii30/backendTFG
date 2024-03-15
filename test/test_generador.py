@@ -1,12 +1,12 @@
 import unittest
 import numpy as np
-from src.gan.generador import Generador
+from src.gan.generador import Generator
 
 class TestGenerador(unittest.TestCase):
     def setUp(self):
         self.latent_dim = 100
         self.output_shape = (32, 32, 3)
-        self.gen = Generador(self.latent_dim, self.output_shape)
+        self.gen = Generator(self.latent_dim, self.output_shape)
 
     def test_model_structure(self):
         model = self.gen.model

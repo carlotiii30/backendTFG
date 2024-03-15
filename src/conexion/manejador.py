@@ -3,7 +3,7 @@ import numpy as np
 from src.prueba.imagenes import Images
 import base64
 from src.procesamiento.procesamiento_texto import Texto
-from src.gan.generador import Generador
+from src.gan.generador import Generator
 
 class Handler:
     """Clase que maneja las peticiones del cliente.
@@ -34,7 +34,7 @@ class Handler:
                 if command == "generar_imagen":
                     try:
                         # Genera la imagen utilizando el modelo Generador
-                        gen_model = Generador(100, (32, 32, 3))
+                        gen_model = Generator(100, (32, 32, 3))
                         image = Images.generate_image(gen_model.model, 1)
                         image = (image * 255).astype(np.uint8)
                         imagen64 = base64.b64encode(image).decode()

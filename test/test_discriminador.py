@@ -1,36 +1,65 @@
 import unittest
 import numpy as np
+from keras.datasets import cifar100
 from src.gan.discriminador import Discriminator
+from src.prueba.entrenamiento import Training
+
 
 class TestDiscriminador(unittest.TestCase):
     def setUp(self):
         self.input_shape = (32, 32, 3)
         self.discriminador = Discriminator(self.input_shape)
+        self.dataset = Training.load_images(cifar100)
 
     def test_model_structure(self):
         model = self.discriminador.model
         self.assertIsNotNone(model)
-'''
+
     def test_discriminate_real_images(self):
         n_samples = 5
-        real_images = np.random.randn(n_samples, *self.input_shape)
-        labels = np.ones((n_samples, 1))  # Etiqueta de 1 para imágenes reales
-        loss, accuracy = self.discriminador.model.evaluate(real_images, labels, verbose=0)
-        self.assertTrue(accuracy > 0.5)  # Verifica que el discriminador pueda distinguir imágenes reales
+        real_images, _ = Training.load_real_data(self.dataset, n_samples)
+        labels = np.ones((n_samples, 1))
+        loss, accuracy = self.discriminador.evaluate(real_images, labels)
+        self.assertTrue(accuracy > 0.5)
 
     def test_discriminate_fake_images(self):
         n_samples = 5
         fake_images = np.random.randn(n_samples, *self.input_shape)
-        labels = np.zeros((n_samples, 1))  # Etiqueta de 0 para imágenes falsas
-        loss, accuracy = self.discriminador.model.evaluate(fake_images, labels, verbose=0)
-        self.assertTrue(accuracy < 0.5)  # Verifica que el discriminador no pueda distinguir imágenes falsas
+        labels = np.zeros((n_samples, 1))
+        loss, accuracy = self.discriminador.model.evaluate(
+            fake_images, labels, verbose=0
+        )
+        self.assertTrue(accuracy < 0.5)
 
-    def test_training(self):
-        # Entrena el discriminador utilizando un conjunto de datos realista y verifique su rendimiento
-        # Puedes simular datos de entrenamiento o utilizar un conjunto de datos real
-        # Verifica la pérdida y la precisión del discriminador durante el entrenamiento
-        return 0
+    def test_real_training(self):
+        # Cargar conjunto de datos reales
+        dataset, labels = Training.load_real_data(self.dataset, 100)
 
-if __name__ == '__main__':
+        # Antes del entrenamiento
+        initial_loss, initial_accuracy = self.discriminador.evaluate(dataset, labels)
+
+        # Entrenar el discriminador
+        Training.train_discriminator(self.discriminador, self.dataset)
+
+        # Después del entrenamiento
+        loss, accuracy = self.discriminador.evaluate(dataset, labels)
+
+        self.assertTrue(accuracy > initial_accuracy)
+
+    def test_fake_training(self):
+        # Generar datos falsos
+        dataset, labels = Training.load_fake_data(100)
+
+        # Antes del entrenamiento
+        initial_loss, initial_accuracy = self.discriminador.evaluate(dataset, labels)
+
+        # Entrenar el discriminador
+        Training.train_discriminator(self.discriminador, self.dataset)
+
+        # Después del entrenamiento
+        loss, accuracy = self.discriminador.evaluate(dataset, labels)
+
+        self.assertTrue(accuracy > initial_accuracy)
+
+if __name__ == "__main__":
     unittest.main()
-'''

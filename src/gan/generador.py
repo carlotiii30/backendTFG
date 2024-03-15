@@ -2,7 +2,7 @@ from keras.layers import Dense, Reshape, Conv2DTranspose, LeakyReLU, Conv2D, Inp
 from keras.models import Sequential, Model
 
 
-class Generador:
+class Generator:
     """Clase que define el generador de una Red Generativa Adversaria (GAN).
 
     Esta clase representa el generador de una GAN, que se encarga de generar imágenes a partir de un vector de ruido

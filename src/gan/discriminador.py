@@ -78,3 +78,11 @@ class Discriminator:
             list: Lista que contiene la pérdida y la precisión del modelo en el conjunto de datos de entrada.
         """
         return self.model.evaluate(x, y)
+
+    def trainable(self, trainable):
+        """Establece si el modelo del discriminador es entrenable o no.
+
+        Args:
+            trainable (bool): Indica si el modelo del discriminador es entrenable o no.
+        """
+        self.model.trainable = trainable
