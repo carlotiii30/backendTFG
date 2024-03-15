@@ -6,22 +6,20 @@ from src.gan.generador import Generator
 from src.prueba.entrenamiento import Training
 
 
-def create_gan(discriminator, generator):
-    discriminator.trainable = False
-    gan = Sequential()
-    gan.add(generator)
-    gan.add(discriminator)
+class GAN:
+    def __init__(self, discriminator, generator):
+        self.gan = self.create_gan(discriminator, generator)
 
-    opt = Adam(learning_rate=0.0002, beta_1=0.5)
-    gan.compile(loss='binary_crossentropy', optimizer=opt)
+    def create_gan(self, discriminator, generator):
+        discriminator.trainable = False
+        gan = Sequential()
+        gan.add(generator)
+        gan.add(discriminator)
 
-    return gan
+        opt = Adam(learning_rate=0.0002, beta_1=0.5)
+        gan.compile(loss="binary_crossentropy", optimizer=opt)
 
-dataset = Training.load_images(cifar100)
-discriminator = Discriminator((32, 32, 3))
-Training.train_discriminator(discriminator, dataset)
+        return gan
 
-generator = Generator(100, (32, 32, 3))
-
-gan = create_gan(discriminator.model, generator.model)
-gan.summary()
+    def summary(self):
+        self.gan.summary()
