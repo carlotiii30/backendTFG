@@ -1,5 +1,5 @@
 import unittest
-from src.conexion import manejador, servidor
+from src.conexion import servidor
 
 class TestConexion(unittest.TestCase):
     def setUp(self):
