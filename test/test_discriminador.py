@@ -43,5 +43,6 @@ class TestDiscriminador(unittest.TestCase):
         loss, accuracy = self.discriminador.evaluate(dataset, labels)
         self.assertTrue(accuracy > initial_accuracy)
 
+
 if __name__ == "__main__":
     unittest.main()

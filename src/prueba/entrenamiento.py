@@ -1,6 +1,5 @@
-from keras.datasets import cifar100
 import numpy as np
-from src.gan.discriminador import Discriminator
+
 
 class Training:
     def load_images(dataset):
@@ -10,7 +9,7 @@ class Training:
         indice = indice[0]
         Xtrain = Xtrain[indice, :, :, :]
 
-        X = Xtrain.astype('float32')
+        X = Xtrain.astype("float32")
         X = (X - 127.5) / 127.5
 
         return X

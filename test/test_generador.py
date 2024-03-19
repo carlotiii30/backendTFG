@@ -2,6 +2,7 @@ import unittest
 import numpy as np
 from src.gan.generador import Generator
 
+
 class TestGenerador(unittest.TestCase):
     def setUp(self):
         self.latent_dim = 100
@@ -30,5 +31,6 @@ class TestGenerador(unittest.TestCase):
         # Verifica la calidad de las imágenes generadas y su similitud con las imágenes reales
         return None
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

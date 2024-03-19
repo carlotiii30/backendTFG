@@ -1,12 +1,12 @@
 from keras.layers import Dense, Reshape, Conv2DTranspose, LeakyReLU, Conv2D, Input
-from keras.models import Sequential, Model
+from keras.models import Sequential
 
 
 class Generator:
     """Clase que define el generador de una Red Generativa Adversaria (GAN).
 
-    Esta clase representa el generador de una GAN, que se encarga de generar imágenes a partir de un vector de ruido
-    de dimensión latente.
+    Esta clase representa el generador de una GAN, que se encarga de generar
+    imágenes a partir de un vector de ruido de dimensión latente.
 
     Attributes:
         latent_dim (int): Dimensión del espacio latente.
@@ -15,7 +15,8 @@ class Generator:
     """
 
     def __init__(self, latent_dim, output_shape):
-        """Inicializa el generador con la dimensión latente y la forma de salida especificadas.
+        """Inicializa el generador con la dimensión latente y la forma de
+        salida especificadas.
 
         Args:
             latent_dim (int): Dimensión del espacio latente.

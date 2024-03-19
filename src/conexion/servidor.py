@@ -2,11 +2,13 @@ import socket
 import threading
 from src.conexion.manejador import Handler
 
-class Server:
-    """Clase que representa un servidor que escucha en un puerto y maneja las conexiones de los clientes.
 
-    Esta clase se encarga de iniciar un servidor que escucha en un puerto específico y maneja las conexiones
-    entrantes de los clientes.
+class Server:
+    """Clase que representa un servidor que escucha en un puerto y maneja las
+    conexiones de los clientes.
+
+    Esta clase se encarga de iniciar un servidor que escucha en un puerto
+    específico y maneja las conexiones entrantes de los clientes.
 
     Attributes:
         host (str): Dirección IP o nombre del host donde escuchará el servidor.
@@ -17,7 +19,8 @@ class Server:
         """Constructor de la clase.
 
         Args:
-            host (str): Dirección IP o nombre del host donde escuchará el servidor.
+            host (str): Dirección IP o nombre del host donde escuchará el
+            servidor.
             port (int): Puerto donde escuchará el servidor.
         """
         self.host = host

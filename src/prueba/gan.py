@@ -1,9 +1,5 @@
 from keras.models import Sequential
 from keras.optimizers import Adam
-from keras.datasets import cifar100
-from src.gan.discriminador import Discriminator
-from src.gan.generador import Generator
-from src.prueba.entrenamiento import Training
 
 
 class GAN:

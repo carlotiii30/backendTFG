@@ -5,7 +5,8 @@ import re
 class Texto:
     """Clase que proporciona funciones para procesar texto.
 
-    Esta clase contiene métodos para realizar operaciones de preprocesamiento y representación de texto.
+    Esta clase contiene métodos para realizar operaciones de preprocesamiento y
+    representación de texto.
 
     """
 
@@ -13,7 +14,8 @@ class Texto:
     def procesar_texto(texto):
         """Procesa un texto dado.
 
-        Realiza operaciones de preprocesamiento, tokenización y representación del texto.
+        Realiza operaciones de preprocesamiento, tokenización y representación
+        del texto.
 
         Args:
             texto (str): El texto a procesar.

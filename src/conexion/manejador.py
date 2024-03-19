@@ -5,10 +5,12 @@ import base64
 from src.procesamiento.procesamiento_texto import Texto
 from src.gan.generador import Generator
 
+
 class Handler:
     """Clase que maneja las peticiones del cliente.
 
-    Esta clase maneja las peticiones enviadas por el cliente y ejecuta las acciones correspondientes.
+    Esta clase maneja las peticiones enviadas por el cliente y ejecuta las
+    acciones correspondientes.
 
     Attributes:
         socket (socket): Socket del cliente.
@@ -54,7 +56,9 @@ class Handler:
                 elif command == "procesar_texto":
                     try:
                         # Procesa el texto utilizando la clase Texto
-                        text, tokens, representacion_numerica = Texto.procesar_texto(text)
+                        text, tokens, representacion_numerica = Texto.procesar_texto(
+                            text
+                        )
 
                         response = {
                             "status": "success",
@@ -78,7 +82,7 @@ class Handler:
             except json.JSONDecodeError as e:
                 response = {
                     "status": "error",
-                    "message": "Error al decodificar el JSON",
+                    "message": f"Error al decodificar el JSON: {str(e)}",
                 }
 
             except Exception as e:

@@ -18,3 +18,6 @@ install: ## Install dependencies
 
 update: ## Update dependencies
 	pip install --upgrade -r requirements.txt
+
+format: ## Format code
+	black src test
