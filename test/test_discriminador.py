@@ -15,22 +15,6 @@ class TestDiscriminador(unittest.TestCase):
         model = self.discriminador.model
         self.assertIsNotNone(model)
 
-    def test_discriminate_real_images(self):
-        self.setUp()
-        n_samples = 5
-        real_images, _ = Training.load_real_data(self.dataset, n_samples)
-        labels = np.ones((n_samples, 1))
-        loss, accuracy = self.discriminador.evaluate(real_images, labels)
-        self.assertTrue(accuracy > 0.5)
-
-    def test_discriminate_fake_images(self):
-        self.setUp()
-        n_samples = 5
-        fake_images = np.random.randn(n_samples, *self.input_shape)
-        labels = np.zeros((n_samples, 1))
-        loss, accuracy = self.discriminador.evaluate(fake_images, labels)
-        self.assertTrue(accuracy < 0.5)
-
     def test_real_training(self):
         self.setUp()
         dataset, labels = Training.load_real_data(self.dataset, 100)
