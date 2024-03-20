@@ -1,5 +1,4 @@
 import unittest
-import numpy as np
 from keras.datasets import cifar100
 from src.gan.discriminador import Discriminator
 from src.prueba.entrenamiento import Training
