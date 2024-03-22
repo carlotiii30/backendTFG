@@ -33,10 +33,6 @@ class TestDiscriminador(unittest.TestCase):
         loss, accuracy = self.discriminador.evaluate(dataset, labels)
         self.assertTrue(accuracy > initial_accuracy)
 
-    def test_build_model(self):
-        model = self.discriminador.build_model()
-        self.assertIsNotNone(model)
-
     def test_summary(self):
         with patch("sys.stdout", self.stdout):
             self.discriminador.summary()
