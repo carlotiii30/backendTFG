@@ -2,7 +2,6 @@ import random
 from PIL import Image
 import io
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 class Images:
