@@ -26,16 +26,18 @@ class Texto:
             dict: Representación numérica del texto utilizando one-hot encoding.
         """
         # Preprocesamiento del texto
-        texto = re.sub(r"[^\w\s]", "", texto)  # Eliminar caracteres especiales
-        texto = texto.lower()  # Convertir a minúsculas
+        texto_preprocesado = re.sub(r"[^\w\s]", "", texto)  # Eliminar caracteres especiales
+        texto_preprocesado = texto_preprocesado.lower()  # Convertir a minúsculas
 
         # Tokenización
-        tokens = TextBlob(texto).words
+        tokens = TextBlob(texto_preprocesado).words
+
+        # Construir vocabulario
+        vocabulario = set(tokens)
 
         # Representación del texto (one-hot encoding)
-        vocabulario = set(tokens)
         representacion_numerica = {}
-        for i, token in enumerate(vocabulario):
+        for token in vocabulario:
             representacion_numerica[token] = [1 if token == t else 0 for t in tokens]
 
-        return texto, tokens, representacion_numerica
+        return texto_preprocesado, tokens, representacion_numerica

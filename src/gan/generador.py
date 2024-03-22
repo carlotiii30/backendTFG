@@ -1,20 +1,23 @@
-from keras.layers import Dense, Reshape, Conv2DTranspose, LeakyReLU, Conv2D, Input
-from keras.models import Sequential
+from keras.layers import Dense, Reshape, Conv2DTranspose, LeakyReLU, Conv2D, Concatenate, Input
+from keras.models import Model
 
 
 class Generator:
-    """Clase que define el generador de una Red Generativa Adversaria (GAN).
+    """Clase que define el generador de una Red Generativa Adversaria
+    Condicional(cGAN).
 
     Esta clase representa el generador de una GAN, que se encarga de generar
-    imágenes a partir de un vector de ruido de dimensión latente.
+    imágenes a partir de un vector de ruido de dimensión latente y de un texto
+    que condiciona la generación de imágenes.
 
     Attributes:
         latent_dim (int): Dimensión del espacio latente.
+        text_embedding_dim (int): Dimensión del espacio de incrustación de texto.
         output_shape (tuple): Forma de la salida del generador.
         model (keras.models.Sequential): Modelo del generador.
     """
 
-    def __init__(self, latent_dim, output_shape):
+    def __init__(self, latent_dim, text_embedding_dim, output_shape):
         """Inicializa el generador con la dimensión latente y la forma de
         salida especificadas.
 
@@ -23,6 +26,7 @@ class Generator:
             output_shape (tuple): Forma de la salida del generador.
         """
         self.latent_dim = latent_dim
+        self.text_embedding_dim = text_embedding_dim
         self.output_shape = output_shape
         self.model = self.build_model()
 
@@ -32,29 +36,32 @@ class Generator:
         Returns:
             keras.models.Sequential: Modelo del generador.
         """
-        model = Sequential()
 
-        # Capa de entrada
-        model.add(Input(shape=(self.latent_dim,)))
+        # Entradas
+        input_latent = Input(shape=(self.latent_dim,))
+        input_text = Input(shape=(self.text_embedding_dim,))
 
-        # Capa densa
-        n_nodes = 256 * 4 * 4
-        model.add(Dense(n_nodes))
-        model.add(LeakyReLU())
-        model.add(Reshape((4, 4, 256)))
+        # Capa densa para combinar el ruido y el texto
+        combined_input = Concatenate()([input_latent, input_text])
+        x = Dense(256 * 4 * 4)(combined_input)
+        x = LeakyReLU()(x)
+        x = Reshape((4, 4, 256))(x)
 
         # Capas de convolución transpuesta
-        model.add(Conv2DTranspose(128, kernel_size=3, strides=2, padding="same"))
-        model.add(LeakyReLU(negative_slope=0.2))
+        x = Conv2DTranspose(128, kernel_size=3, strides=2, padding="same")(x)
+        x = LeakyReLU(negative_slope=0.2)(x)
 
-        model.add(Conv2DTranspose(128, kernel_size=3, strides=2, padding="same"))
-        model.add(LeakyReLU(negative_slope=0.2))
+        x = Conv2DTranspose(128, kernel_size=3, strides=2, padding="same")(x)
+        x = LeakyReLU(negative_slope=0.2)(x)
 
-        model.add(Conv2DTranspose(128, kernel_size=3, strides=2, padding="same"))
-        model.add(LeakyReLU(negative_slope=0.2))
+        x = Conv2DTranspose(128, kernel_size=3, strides=2, padding="same")(x)
+        x = LeakyReLU(negative_slope=0.2)(x)
 
         # Capa de salida
-        model.add(Conv2D(3, kernel_size=3, activation="tanh", padding="same"))
+        output = Conv2D(3, kernel_size=3, activation="tanh", padding="same")(x)
+
+        # Modelo
+        model = Model(inputs=[input_latent, input_text], outputs=output)
 
         return model
 
@@ -72,3 +79,11 @@ class Generator:
             numpy.ndarray: Imágenes generadas por el generador.
         """
         return self.model.predict(x_input)
+
+    def save(self, filename):
+        """Guarda el modelo del generador en un archivo.
+
+        Args:
+            filename (str): Nombre del archivo donde se guardará el modelo.
+        """
+        self.model.save(filename)
