@@ -1,13 +1,15 @@
 import unittest
+from unittest.mock import patch
 import numpy as np
 from src.gan.generador import Generator
-
+from io import StringIO
 
 class TestGenerador(unittest.TestCase):
     def setUp(self):
         self.latent_dim = 100
         self.output_shape = (32, 32, 3)
         self.gen = Generator(self.latent_dim, self.output_shape)
+        self.stdout = StringIO()
 
     def test_model_structure(self):
         model = self.gen.model
@@ -31,6 +33,9 @@ class TestGenerador(unittest.TestCase):
         # Verifica la calidad de las imágenes generadas y su similitud con las imágenes reales
         return None
 
+    def test_summary(self):
+        with patch('sys.stdout', self.stdout):
+            self.gen.summary()
+            printed_output = self.stdout.getvalue().strip()
 
-if __name__ == "__main__":
-    unittest.main()
+        self.assertNotEqual(printed_output, "")

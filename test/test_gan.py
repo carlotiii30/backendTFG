@@ -13,7 +13,3 @@ class TestGan(unittest.TestCase):
     def test_gan_structure(self):
         model = self.gan
         self.assertIsNotNone(model)
-
-
-if __name__ == "__main__":
-    unittest.main()

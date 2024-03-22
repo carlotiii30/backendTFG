@@ -38,7 +38,3 @@ def test_server_start(self, mock_socket):
 
         mock_handler.assert_called_once_with(mock_client_socket)
         mock_handler.return_value.handle.assert_called_once()
-
-
-if __name__ == "__main__":
-    unittest.main()
