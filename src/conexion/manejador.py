@@ -1,9 +1,10 @@
 import json
 import numpy as np
+import logging
 from src.prueba.imagenes import Images
 import base64
 from src.procesamiento.procesamiento_texto import Texto
-from src.gan.generador import Generator
+from gan.generador import Generator
 
 
 class Handler:
@@ -47,11 +48,15 @@ class Handler:
                             "image": imagen64,
                         }
 
+                        logging.info("Imagen generada correctamente")
+
                     except Exception as e:
                         response = {
                             "status": "error",
                             "message": f"Error al generar la imagen: {str(e)}",
                         }
+
+                        logging.error(f"Error al generar la imagen: {str(e)}")
 
                 elif command == "procesar_texto":
                     try:
@@ -67,11 +72,16 @@ class Handler:
                             "tokens": tokens,
                             "representacion_numerica": representacion_numerica,
                         }
+
+                        logging.info("Texto procesado correctamente")
+
                     except Exception as e:
                         response = {
                             "status": "error",
                             "message": f"Error al procesar el texto: {str(e)}",
                         }
+
+                        logging.error(f"Error al procesar el texto: {str(e)}")
 
                 else:
                     response = {
@@ -79,11 +89,15 @@ class Handler:
                         "message": f"Comando desconocido: {command}",
                     }
 
+                    logging.error(f"Comando desconocido: {command}")
+
             except json.JSONDecodeError as e:
                 response = {
                     "status": "error",
                     "message": f"Error al decodificar el JSON: {str(e)}",
                 }
+
+                logging.error(f"Error al decodificar el JSON: {str(e)}")
 
             except Exception as e:
                 response = {
@@ -91,7 +105,14 @@ class Handler:
                     "message": f"Error: {str(e)}",
                 }
 
+                logging.error(f"Error: {str(e)}")
+
             try:
                 self.socket.sendall(json.dumps(response).encode())
+
+                logging.info("Respuesta enviada al cliente")
+
             except Exception as e:
                 print(f"Error al enviar la respuesta al cliente: {str(e)}")
+
+                logging.error(f"Error al enviar la respuesta al cliente: {str(e)}")
