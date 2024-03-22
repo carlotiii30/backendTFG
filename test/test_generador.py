@@ -21,6 +21,13 @@ class TestGenerador(unittest.TestCase):
         model = self.gen.model
         self.assertIsNotNone(model)
 
+    def test_summary(self):
+        with patch("sys.stdout", self.stdout):
+            self.gen.summary()
+            printed_output = self.stdout.getvalue().strip()
+
+        self.assertNotEqual(printed_output, "")
+
     def test_generate_images(self):
         n_samples = 5
         texto_ejemplo = "Este es un ejemplo de texto para generar imágenes."
@@ -39,9 +46,3 @@ class TestGenerador(unittest.TestCase):
         # Verifica la pérdida generativa y la calidad de las imágenes generadas en cada época
         return None
 
-    def test_summary(self):
-        with patch("sys.stdout", self.stdout):
-            self.gen.summary()
-            printed_output = self.stdout.getvalue().strip()
-
-        self.assertNotEqual(printed_output, "")

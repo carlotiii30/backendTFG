@@ -17,22 +17,6 @@ class TestDiscriminador(unittest.TestCase):
         model = self.discriminador.model
         self.assertIsNotNone(model)
 
-    def test_real_training(self):
-        self.setUp()
-        dataset, labels = Training.load_real_data(self.dataset, 100)
-        initial_loss, initial_accuracy = self.discriminador.evaluate(dataset, labels)
-        Training.train_discriminator(self.discriminador, self.dataset)
-        loss, accuracy = self.discriminador.evaluate(dataset, labels)
-        self.assertTrue(accuracy > initial_accuracy)
-
-    def test_fake_training(self):
-        self.setUp()
-        dataset, labels = Training.load_fake_data(100)
-        initial_loss, initial_accuracy = self.discriminador.evaluate(dataset, labels)
-        Training.train_discriminator(self.discriminador, self.dataset)
-        loss, accuracy = self.discriminador.evaluate(dataset, labels)
-        self.assertTrue(accuracy > initial_accuracy)
-
     def test_summary(self):
         with patch("sys.stdout", self.stdout):
             self.discriminador.summary()
@@ -49,3 +33,19 @@ class TestDiscriminador(unittest.TestCase):
     def test_trainable(self):
         trainable = self.discriminador.trainable
         self.assertIsNotNone(trainable)
+
+    def test_real_training(self):
+        self.setUp()
+        dataset, labels = Training.load_real_data(self.dataset, 100)
+        initial_loss, initial_accuracy = self.discriminador.evaluate(dataset, labels)
+        Training.train_discriminator(self.discriminador, self.dataset)
+        loss, accuracy = self.discriminador.evaluate(dataset, labels)
+        self.assertTrue(accuracy > initial_accuracy)
+
+    def test_fake_training(self):
+        self.setUp()
+        dataset, labels = Training.load_fake_data(100)
+        initial_loss, initial_accuracy = self.discriminador.evaluate(dataset, labels)
+        Training.train_discriminator(self.discriminador, self.dataset)
+        loss, accuracy = self.discriminador.evaluate(dataset, labels)
+        self.assertTrue(accuracy > initial_accuracy)
