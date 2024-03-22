@@ -4,7 +4,7 @@ import logging
 from src.prueba.imagenes import Images
 import base64
 from src.procesamiento.procesamiento_texto import Texto
-from gan.generador import Generator
+from src.gan.generador import Generator
 
 
 class Handler:
