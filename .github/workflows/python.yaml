@@ -27,5 +27,8 @@ jobs:
         - name: Update dependencies
           run: make update
 
+        - name: Download 'punkt'
+          run: python -c 'import nltk; nltk.download("punkt")'
+
         - name: Run tests
           run: make run_test
