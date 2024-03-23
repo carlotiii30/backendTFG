@@ -1,4 +1,12 @@
-from keras.layers import Dense, Reshape, Conv2DTranspose, LeakyReLU, Conv2D, Concatenate, Input
+from keras.layers import (
+    Dense,
+    Reshape,
+    Conv2DTranspose,
+    LeakyReLU,
+    Conv2D,
+    Concatenate,
+    Input,
+)
 from keras.models import Model
 
 

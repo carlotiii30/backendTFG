@@ -9,7 +9,7 @@ from io import StringIO
 class TestGenerador(unittest.TestCase):
     def setUp(self):
         self.latent_dim = 100
-        self.text_embedding_dim = 50
+        self.text_embedding_dim = 9
         self.output_shape = (32, 32, 3)
         self.gen = Generator(
             self.latent_dim, self.text_embedding_dim, self.output_shape
@@ -29,15 +29,21 @@ class TestGenerador(unittest.TestCase):
         self.assertNotEqual(printed_output, "")
 
     def test_generate_images(self):
-        n_samples = 5
         texto_ejemplo = "Este es un ejemplo de texto para generar imágenes."
-        self.texto_procesador.procesar_texto(texto_ejemplo)
+        n_samples = texto_ejemplo.count(" ") + 1
+
+        _, _, representacion_numerica = self.texto_procesador.procesar_texto(
+            texto_ejemplo
+        )
+
+        representacion_numerica = np.array(representacion_numerica)
         generated_images = self.gen.predict(
             [
                 np.random.randn(n_samples, self.latent_dim),
-                np.random.randn(n_samples, self.text_embedding_dim),
+                representacion_numerica,
             ]
         )
+
         self.assertEqual(generated_images.shape, (n_samples,) + self.output_shape)
 
     def test_training_stability(self):
@@ -45,4 +51,3 @@ class TestGenerador(unittest.TestCase):
         # Puedes utilizar datos de entrenamiento simulados o un conjunto de datos real
         # Verifica la pérdida generativa y la calidad de las imágenes generadas en cada época
         return None
-
