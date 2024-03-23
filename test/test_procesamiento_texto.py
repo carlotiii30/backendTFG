@@ -1,5 +1,4 @@
 import unittest
-
 import numpy as np
 from src.procesamiento.procesamiento_texto import Texto
 

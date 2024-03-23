@@ -1,7 +1,7 @@
 import unittest
-from src.prueba.gan import GAN
-from src.gan.discriminador import Discriminator
-from src.gan.generador import Generator
+from src.modelo.gan import GAN
+from src.modelo.componentes.discriminador import Discriminator
+from src.modelo.componentes.generador import Generator
 
 
 class TestGan(unittest.TestCase):

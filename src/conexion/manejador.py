@@ -1,10 +1,10 @@
 import json
 import numpy as np
 import logging
-from src.prueba.imagenes import Images
 import base64
+from src.prueba.imagenes import Images
 from src.procesamiento.procesamiento_texto import Texto
-from src.gan.generador import Generator
+from src.modelo.componentes.generador import Generator
 
 
 class Handler:

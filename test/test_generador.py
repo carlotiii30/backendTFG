@@ -1,9 +1,9 @@
 import unittest
 from unittest.mock import patch
 import numpy as np
-from src.gan.generador import Generator
-from src.procesamiento.procesamiento_texto import Texto
 from io import StringIO
+from src.modelo.componentes.generador import Generator
+from src.procesamiento.procesamiento_texto import Texto
 
 
 class TestGenerador(unittest.TestCase):

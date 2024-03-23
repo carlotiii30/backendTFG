@@ -2,8 +2,8 @@ import unittest
 from unittest.mock import patch
 from io import StringIO
 from keras.datasets import cifar100
-from src.gan.discriminador import Discriminator
-from src.prueba.entrenamiento import Training
+from src.modelo.componentes.discriminador import Discriminator
+from src.procesamiento.entrenamiento import Training
 
 
 class TestDiscriminador(unittest.TestCase):
