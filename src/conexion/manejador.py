@@ -36,16 +36,30 @@ class Handler:
 
                 if command == "generar_imagen":
                     try:
-                        # Genera la imagen utilizando el modelo Generador
-                        gen_model = Generator(100, (32, 32, 3))
-                        image = Images.generate_image(gen_model.model, 1)
-                        image = (image * 255).astype(np.uint8)
-                        imagen64 = base64.b64encode(image).decode()
+                        _, _, representacion_numerica = Texto.procesar_texto(text)
+                        representacion_numerica = np.array(representacion_numerica)
+                        representacion_numerica = np.mean(
+                            representacion_numerica, axis=0
+                        ).reshape(1, -1)
+
+                        dim = representacion_numerica.shape[1]
+
+                        generated_images = Generator(100, dim, (32, 32, 3)).predict(
+                            [
+                                np.random.randn(1, 100),
+                                representacion_numerica,
+                            ]
+                        )
+
+                        #image_list = generated_images[0].tolist()
+
+                        image_bytes = bytes(generated_images[0])
+                        image_data = base64.b64encode(image_bytes).decode('utf-8')
 
                         response = {
                             "status": "success",
                             "message": "Imagen generada correctamente",
-                            "image": imagen64,
+                            "image": image_data,
                         }
 
                         logging.info("Imagen generada correctamente")

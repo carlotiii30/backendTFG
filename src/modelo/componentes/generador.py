@@ -31,6 +31,7 @@ class Generator:
 
         Args:
             latent_dim (int): Dimensión del espacio latente.
+            text_embedding_dim (int): Dimensión del espacio de incrustación de texto.
             output_shape (tuple): Forma de la salida del generador.
         """
         self.latent_dim = latent_dim

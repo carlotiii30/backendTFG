@@ -30,11 +30,12 @@ def test_server_start(self, mock_socket):
     mock_server_socket.accept.assert_called_once()
     mock_socket.socket.return_value.close.assert_called_once()
 
-    @patch("src.conexion.servidor.Handler")
-    def test_client_handler(self, mock_handler):
-        mock_client_socket = "client_socket"
 
-        self.server.client_handler(mock_client_socket)
+@patch("src.conexion.servidor.Handler")
+def test_client_handler(self, mock_handler):
+    mock_client_socket = "client_socket"
 
-        mock_handler.assert_called_once_with(mock_client_socket)
-        mock_handler.return_value.handle.assert_called_once()
+    self.server.client_handler(mock_client_socket)
+
+    mock_handler.assert_called_once_with(mock_client_socket)
+    mock_handler.return_value.handle.assert_called_once()
