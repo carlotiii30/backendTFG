@@ -2,7 +2,7 @@ import json
 import numpy as np
 import logging
 import base64
-from src.prueba.imagenes import Images
+from PIL import Image
 from src.procesamiento.procesamiento_texto import Texto
 from src.modelo.componentes.generador import Generator
 
@@ -51,15 +51,15 @@ class Handler:
                             ]
                         )
 
-                        #image_list = generated_images[0].tolist()
-
-                        image_bytes = bytes(generated_images[0])
-                        image_data = base64.b64encode(image_bytes).decode('utf-8')
+                        scaled_images = ((generated_images + 1) * 127.5).astype(np.uint8)
+                        image64 = base64.b64encode(
+                            Image.fromarray(scaled_images[0]).tobytes()
+                        ).decode()
 
                         response = {
                             "status": "success",
                             "message": "Imagen generada correctamente",
-                            "image": image_data,
+                            "image": image64,
                         }
 
                         logging.info("Imagen generada correctamente")
