@@ -4,34 +4,33 @@ from src.conexion.manejador import Handler
 
 
 class Server:
-    """Clase que representa un servidor que escucha en un puerto y maneja las
-    conexiones de los clientes.
+    """Class that represents a server that listens on a port and handles
+    client connections.
 
-    Esta clase se encarga de iniciar un servidor que escucha en un puerto
-    específico y maneja las conexiones entrantes de los clientes.
+    This class is responsible for starting a server that listens on a specific
+    port and handles incoming client connections.
 
     Attributes:
-        host (str): Dirección IP o nombre del host donde escuchará el servidor.
-        port (int): Puerto donde escuchará el servidor.
+        host (str): IP address or host name where the server will listen.
+        port (int): Port where the server will listen.
     """
 
     def __init__(self, host, port):
-        """Constructor de la clase.
+        """Class constructor.
 
         Args:
-            host (str): Dirección IP o nombre del host donde escuchará el
-            servidor.
-            port (int): Puerto donde escuchará el servidor.
+            host (str): IP address or host name where the server will listen.
+            port (int): Port where the server will listen.
         """
         self.host = host
         self.port = port
 
     def start(self):
-        """Método que inicia el servidor."""
+        """Method that starts the server."""
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
             server_socket.bind((self.host, self.port))
             server_socket.listen()
-            print(f"Servidor escuchando en el puerto {self.port}")
+            print(f"Server listening on port {self.port}")
             while True:
                 client_socket, _ = server_socket.accept()
                 threading.Thread(
@@ -39,10 +38,10 @@ class Server:
                 ).start()
 
     def client_handler(self, client_socket):
-        """Método que maneja la conexión con un cliente.
+        """Method that handles a connection with a client.
 
         Args:
-            client_socket (socket): Socket del cliente.
+            client_socket (socket): Client socket.
         """
         handler = Handler(client_socket)
         handler.handle()

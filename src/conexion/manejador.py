@@ -8,25 +8,25 @@ from src.modelo.componentes.generador import Generator
 
 
 class Handler:
-    """Clase que maneja las peticiones del cliente.
+    """Class that handles client requests.
 
-    Esta clase maneja las peticiones enviadas por el cliente y ejecuta las
-    acciones correspondientes.
+    This class handles the requests sent by the client and executes the
+    corresponding actions.
 
     Attributes:
-        socket (socket): Socket del cliente.
+        socket (socket): Client socket.
     """
 
     def __init__(self, socket):
-        """Constructor de la clase.
+        """Class constructor.
 
         Args:
-            socket: Socket del cliente.
+            socket: Client socket.
         """
         self.socket = socket
 
     def handle(self):
-        """Método que maneja la petición del cliente."""
+        """Method that handles the client's request."""
         with self.socket:
             data = self.socket.recv(1024).decode()
             try:
@@ -34,20 +34,20 @@ class Handler:
                 command = request.get("command")
                 text = request.get("text", "")
 
-                if command == "generar_imagen":
+                if command == "generate_image":
                     try:
-                        _, _, representacion_numerica = Text.process_text(text)
-                        representacion_numerica = np.array(representacion_numerica)
-                        representacion_numerica = np.mean(
-                            representacion_numerica, axis=0
+                        _, _, numeric_representation = Text.process_text(text)
+                        numeric_representation = np.array(numeric_representation)
+                        numeric_representation = np.mean(
+                            numeric_representation, axis=0
                         ).reshape(1, -1)
 
-                        dim = representacion_numerica.shape[1]
+                        dim = numeric_representation.shape[1]
 
                         generated_images = Generator(100, dim, (32, 32, 3)).predict(
                             [
                                 np.random.randn(1, 100),
-                                representacion_numerica,
+                                numeric_representation,
                             ]
                         )
 
@@ -58,60 +58,60 @@ class Handler:
 
                         response = {
                             "status": "success",
-                            "message": "Imagen generada correctamente",
+                            "message": "Image generated successfully",
                             "image": image64,
                         }
 
-                        logging.info("Imagen generada correctamente")
+                        logging.info("Image generated successfully")
 
                     except Exception as e:
                         response = {
                             "status": "error",
-                            "message": f"Error al generar la imagen: {str(e)}",
+                            "message": f"Error generating the image: {str(e)}",
                         }
 
-                        logging.error(f"Error al generar la imagen: {str(e)}")
+                        logging.error(f"Error generating the image: {str(e)}")
 
-                elif command == "procesar_texto":
+                elif command == "process_text":
                     try:
-                        # Procesa el texto utilizando la clase Texto
-                        text, tokens, representacion_numerica = Text.process_text(
+                        # Process the text using the Text class
+                        text, tokens, numeric_representation = Text.process_text(
                             text
                         )
 
                         response = {
                             "status": "success",
-                            "message": "Texto procesado correctamente",
+                            "message": "Text processed successfully",
                             "text": text,
                             "tokens": tokens,
-                            "representacion_numerica": representacion_numerica,
+                            "numeric_representation": numeric_representation,
                         }
 
-                        logging.info("Texto procesado correctamente")
+                        logging.info("Text processed successfully")
 
                     except Exception as e:
                         response = {
                             "status": "error",
-                            "message": f"Error al procesar el texto: {str(e)}",
+                            "message": f"Error processing the text: {str(e)}",
                         }
 
-                        logging.error(f"Error al procesar el texto: {str(e)}")
+                        logging.error(f"Error processing the text: {str(e)}")
 
                 else:
                     response = {
                         "status": "error",
-                        "message": f"Comando desconocido: {command}",
+                        "message": f"Unknown command: {command}",
                     }
 
-                    logging.error(f"Comando desconocido: {command}")
+                    logging.error(f"Unknown command: {command}")
 
             except json.JSONDecodeError as e:
                 response = {
                     "status": "error",
-                    "message": f"Error al decodificar el JSON: {str(e)}",
+                    "message": f"Error decoding JSON: {str(e)}",
                 }
 
-                logging.error(f"Error al decodificar el JSON: {str(e)}")
+                logging.error(f"Error decoding JSON: {str(e)}")
 
             except Exception as e:
                 response = {
@@ -124,9 +124,9 @@ class Handler:
             try:
                 self.socket.sendall(json.dumps(response).encode())
 
-                logging.info("Respuesta enviada al cliente")
+                logging.info("Response sent to the client")
 
             except Exception as e:
-                print(f"Error al enviar la respuesta al cliente: {str(e)}")
+                print(f"Error sending the response to the client: {str(e)}")
 
-                logging.error(f"Error al enviar la respuesta al cliente: {str(e)}")
+                logging.error(f"Error sending the response to the client: {str(e)}")

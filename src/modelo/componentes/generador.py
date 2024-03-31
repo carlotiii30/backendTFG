@@ -11,28 +11,30 @@ from keras.models import Model
 
 
 class Generator:
-    """Clase que define el generador de una Red Generativa Adversaria
-    Condicional(cGAN).
-
-    Esta clase representa el generador de una GAN, que se encarga de generar
-    imágenes a partir de un vector de ruido de dimensión latente y de un texto
-    que condiciona la generación de imágenes.
+    """
+    A class representing a generator model.
 
     Attributes:
-        latent_dim (int): Dimensión del espacio latente.
-        text_embedding_dim (int): Dimensión del espacio de incrustación de texto.
-        output_shape (tuple): Forma de la salida del generador.
-        model (keras.models.Sequential): Modelo del generador.
+        latent_dim (int): The dimension of the latent space.
+        text_embedding_dim (int): The dimension of the text embedding.
+        output_shape (tuple): The shape of the output image.
+        model (tf.keras.Model): The generator model.
+
+    Methods:
+        build_model(): Builds the generator model.
+        summary(): Prints a summary of the generator model.
+        predict(x_input): Generates an output image given an input.
+        save(filename): Saves the generator model to a file.
     """
 
     def __init__(self, latent_dim, text_embedding_dim, output_shape):
-        """Inicializa el generador con la dimensión latente y la forma de
-        salida especificadas.
+        """
+        Initializes the Generator object.
 
         Args:
-            latent_dim (int): Dimensión del espacio latente.
-            text_embedding_dim (int): Dimensión del espacio de incrustación de texto.
-            output_shape (tuple): Forma de la salida del generador.
+            latent_dim (int): The dimension of the latent space.
+            text_embedding_dim (int): The dimension of the text embedding.
+            output_shape (tuple): The shape of the output image.
         """
         self.latent_dim = latent_dim
         self.text_embedding_dim = text_embedding_dim
@@ -40,23 +42,24 @@ class Generator:
         self.model = self.build_model()
 
     def build_model(self):
-        """Construye y compila el modelo del generador.
+        """
+        Builds the generator model.
 
         Returns:
-            keras.models.Sequential: Modelo del generador.
+            tf.keras.Model: The generator model.
         """
 
-        # Entradas
+        # Inputs
         input_latent = Input(shape=(self.latent_dim,))
         input_text = Input(shape=(self.text_embedding_dim,))
 
-        # Capa densa para combinar el ruido y el texto
+        # Dense layer
         combined_input = Concatenate()([input_latent, input_text])
         x = Dense(256 * 4 * 4)(combined_input)
         x = LeakyReLU()(x)
         x = Reshape((4, 4, 256))(x)
 
-        # Capas de convolución transpuesta
+        # Convolutional layers
         x = Conv2DTranspose(128, kernel_size=3, strides=2, padding="same")(x)
         x = LeakyReLU(negative_slope=0.2)(x)
 
@@ -66,33 +69,37 @@ class Generator:
         x = Conv2DTranspose(128, kernel_size=3, strides=2, padding="same")(x)
         x = LeakyReLU(negative_slope=0.2)(x)
 
-        # Capa de salida
+        # Output layer
         output = Conv2D(3, kernel_size=3, activation="tanh", padding="same")(x)
 
-        # Modelo
+        # Model
         model = Model(inputs=[input_latent, input_text], outputs=output)
 
         return model
 
     def summary(self):
-        """Imprime un resumen del modelo del generador."""
+        """
+        Prints a summary of the generator model.
+        """
         return self.model.summary()
 
     def predict(self, x_input):
-        """Genera imágenes a partir de un vector de entrada.
+        """
+        Generates an output image given an input.
 
         Args:
-            x_input (numpy.ndarray): Vector de entrada.
+            x_input: The input to the generator model.
 
         Returns:
-            numpy.ndarray: Imágenes generadas por el generador.
+            The generated output image.
         """
         return self.model.predict(x_input)
 
     def save(self, filename):
-        """Guarda el modelo del generador en un archivo.
+        """
+        Saves the generator model to a file.
 
         Args:
-            filename (str): Nombre del archivo donde se guardará el modelo.
+            filename (str): The name of the file to save the model to.
         """
         self.model.save(filename)
