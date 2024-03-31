@@ -29,23 +29,24 @@ class TestGenerador(unittest.TestCase):
         self.assertNotEqual(printed_output, "")
 
     def test_generate_images(self):
-       return None
-       ''' texto_ejemplo = "Este es un ejemplo de texto para generar imágenes."
+        texto_ejemplo = "Este es un ejemplo de texto para generar imágenes."
         n_samples = texto_ejemplo.count(" ") + 1
 
-        _, _, representacion_numerica = self.texto_procesador.procesar_texto(
-            texto_ejemplo
-        )
+        _, _, n1, n2 = self.texto_procesador.process_text(texto_ejemplo)
 
-        representacion_numerica = np.array(representacion_numerica)
+        # Concatenar las dos representaciones numéricas
+        n = np.concatenate((n1, n2), axis=1)
+
+        n = n[:, :n_samples]
+
         generated_images = self.gen.predict(
             [
                 np.random.randn(n_samples, self.latent_dim),
-                representacion_numerica,
+                n,
             ]
         )
 
-        self.assertEqual(generated_images.shape, (n_samples,) + self.output_shape)'''
+        self.assertEqual(generated_images.shape, (n_samples,) + self.output_shape)
 
     def test_training_stability(self):
         # Entrena el generador durante varias épocas y verifica la estabilidad del entrenamiento
