@@ -1,8 +1,6 @@
 import json
 import numpy as np
 import logging
-import base64
-from PIL import Image
 from src.procesamiento.procesamiento_texto import Text
 from src.modelo.componentes.generador import Generator
 
@@ -36,30 +34,28 @@ class Handler:
 
                 if command == "generate_image":
                     try:
-                        _, _, numeric_representation = Text.process_text(text)
-                        numeric_representation = np.array(numeric_representation)
-                        numeric_representation = np.mean(
-                            numeric_representation, axis=0
-                        ).reshape(1, -1)
+                        _, _, n1, n2 = Text.process_text(text)
 
-                        dim = numeric_representation.shape[1]
+                        n = np.concatenate((n1, n2), axis=1)
+                        n = n[:, :9]
 
-                        generated_images = Generator(100, dim, (32, 32, 3)).predict(
-                            [
-                                np.random.randn(1, 100),
-                                numeric_representation,
-                            ]
-                        )
+                        dim = n.shape[1]
 
-                        scaled_images = ((generated_images + 1) * 127.5).astype(np.uint8)
-                        image64 = base64.b64encode(
-                            Image.fromarray(scaled_images[0]).tobytes()
-                        ).decode()
+                        gen = Generator(100, dim, (32, 32, 3))
+                        generated_images = gen.predict([np.random.randn(1, 100), n])
+
+                        generated_images = (
+                            generated_images - generated_images.min()
+                        ) / (generated_images.max() - generated_images.min())
+
+                        image_list = generated_images[0].tolist()
+
+                        image_json = json.dumps(image_list)
 
                         response = {
                             "status": "success",
                             "message": "Image generated successfully",
-                            "image": image64,
+                            "image": image_json,
                         }
 
                         logging.info("Image generated successfully")
@@ -75,9 +71,7 @@ class Handler:
                 elif command == "process_text":
                     try:
                         # Process the text using the Text class
-                        text, tokens, numeric_representation = Text.process_text(
-                            text
-                        )
+                        text, tokens, numeric_representation = Text.process_text(text)
 
                         response = {
                             "status": "success",

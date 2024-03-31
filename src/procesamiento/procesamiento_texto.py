@@ -50,7 +50,6 @@ class Text:
         if os.path.exists(glove_input_wiki) and not os.path.exists(word2vec_output_wiki):
             glove2word2vec(glove_input_wiki, word2vec_output_wiki)
 
-
         # Load the pre-trained GloVe models
         model1 = KeyedVectors.load_word2vec_format(glove_input_twitter, binary=False, no_header=True)
         model2 = KeyedVectors.load_word2vec_format(glove_input_wiki, binary=False, no_header=True)
@@ -65,4 +64,3 @@ class Text:
                 numerical_representation2[i] = model2[token]
 
         return preprocessed_text, tokens, numerical_representation1, numerical_representation2
-
