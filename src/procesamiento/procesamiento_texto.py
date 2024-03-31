@@ -1,3 +1,4 @@
+import os
 import re
 import numpy as np
 from textblob import TextBlob
@@ -32,6 +33,7 @@ class Text:
             r"[^\w\s]", "", text
         )  # Remove special characters
         preprocessed_text = preprocessed_text.lower()  # Convert to lowercase
+        preprocessed_text = preprocessed_text.rstrip()  # Remove trailing spaces
 
         # Tokenization
         tokens = TextBlob(preprocessed_text).words
@@ -39,11 +41,15 @@ class Text:
         # Convert GloVe vectors to Word2Vec format
         glove_input_twitter = './data/glove/glove.twitter.27B.50d.txt'
         word2vec_output_twitter = './data/word2vec/glove_model1.word2vec'
-        glove2word2vec(glove_input_twitter, word2vec_output_twitter)
+        if os.path.exists(glove_input_twitter) and not os.path.exists(word2vec_output_twitter):
+            glove2word2vec(glove_input_twitter, word2vec_output_twitter)
+
 
         glove_input_wiki = './data/glove/glove.6B.100d.txt'
         word2vec_output_wiki = './data/word2vec/glove_model2.word2vec'
-        glove2word2vec(glove_input_wiki, word2vec_output_wiki)
+        if os.path.exists(glove_input_wiki) and not os.path.exists(word2vec_output_wiki):
+            glove2word2vec(glove_input_wiki, word2vec_output_wiki)
+
 
         # Load the pre-trained GloVe models
         model1 = KeyedVectors.load_word2vec_format(glove_input_twitter, binary=False, no_header=True)
