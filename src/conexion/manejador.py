@@ -3,7 +3,7 @@ import numpy as np
 import logging
 import base64
 from PIL import Image
-from src.procesamiento.procesamiento_texto import Texto
+from src.procesamiento.procesamiento_texto import Text
 from src.modelo.componentes.generador import Generator
 
 
@@ -36,7 +36,7 @@ class Handler:
 
                 if command == "generar_imagen":
                     try:
-                        _, _, representacion_numerica = Texto.procesar_texto(text)
+                        _, _, representacion_numerica = Text.process_text(text)
                         representacion_numerica = np.array(representacion_numerica)
                         representacion_numerica = np.mean(
                             representacion_numerica, axis=0
@@ -75,7 +75,7 @@ class Handler:
                 elif command == "procesar_texto":
                     try:
                         # Procesa el texto utilizando la clase Texto
-                        text, tokens, representacion_numerica = Texto.procesar_texto(
+                        text, tokens, representacion_numerica = Text.process_text(
                             text
                         )
 
