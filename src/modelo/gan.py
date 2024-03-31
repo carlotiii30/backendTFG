@@ -21,6 +21,16 @@ class GAN:
         self.gan = self.create_gan(discriminator, generator)
 
     def create_gan(self, discriminator, generator):
+        """
+        Creates the GAN model.
+
+        Args:
+            discriminator (object): The discriminator model.
+            generator (object): The generator model.
+
+        Returns:
+            object: The compiled GAN model.
+        """
         discriminator.trainable = False
         gan = Sequential()
         gan.add(generator)
