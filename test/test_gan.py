@@ -6,7 +6,7 @@ from src.modelo.componentes.generador import Generator
 
 class TestGan(unittest.TestCase):
     def setUp(self):
-        self.discriminator = Discriminator((32, 32, 3))
+        self.discriminator = Discriminator((32, 32, 3), 50)
         self.generator = Generator(100, 50, (32, 32, 3))
         self.gan = GAN(self.discriminator.model, self.generator.model)
 

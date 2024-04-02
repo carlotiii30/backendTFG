@@ -74,13 +74,14 @@ class Training:
         return acc
 
     @staticmethod
-    def train_discriminator(discriminator, dataset, n_iter=20, n_batch=128):
+    def train_discriminator(discriminator, dataset, condition, n_iter=20, n_batch=128):
         """
         Train the discriminator model.
 
         Args:
             discriminator: The discriminator model to train.
             dataset: The dataset to train the discriminator on.
+            condition: The additional condition for the discriminator.
             n_iter: The number of training iterations.
             n_batch: The batch size.
 
@@ -91,11 +92,15 @@ class Training:
 
         for i in range(n_iter):
             X_real, y_real = Training.load_real_data(dataset, half_batch)
+            # Agrega la condición a los datos reales
+            X_real = np.concatenate([X_real, condition], axis=1)
             real_acc = Training.train_step(discriminator.model, X_real, y_real)
 
             X_fake, y_fake = Training.load_fake_data(half_batch)
+            # Agrega la condición a los datos falsos
+            X_fake = np.concatenate([X_fake, condition], axis=1)
             fake_acc = Training.train_step(discriminator.model, X_fake, y_fake)
 
             print(
-                f"Epoch: {i + 1}, Real Accuracy: {real_acc * 100}, Fake Accuracy: {fake_acc * 100}"
+                f"Epoch: {i + 1}, Real Accuracy: {real_acc * 100}, Fake Accuracy: {fake_acc * 100}, Condition: {condition}"
             )

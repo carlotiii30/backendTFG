@@ -11,14 +11,16 @@ from keras.models import Model
 
 
 class Generator:
-    """
-    A class representing a generator model.
+    """Class representing a generator model for a Generative Adversarial Network (GAN).
+
+    This class defines the generator model, which is responsible for generating
+    images based on a given input, typically a latent space vector.
 
     Attributes:
-        latent_dim (int): The dimension of the latent space.
-        text_embedding_dim (int): The dimension of the text embedding.
-        output_shape (tuple): The shape of the output image.
-        model (tf.keras.Model): The generator model.
+        latent_dim (int): Dimension of the latent space.
+        text_embedding_dim (int): Dimension of the text embedding.
+        output_shape (tuple): Shape of the output image.
+        model (keras.models.Model): Generator model.
 
     Methods:
         build_model(): Builds the generator model.
@@ -28,13 +30,12 @@ class Generator:
     """
 
     def __init__(self, latent_dim, text_embedding_dim, output_shape):
-        """
-        Initializes the Generator object.
+        """Initializes the Generator object.
 
         Args:
-            latent_dim (int): The dimension of the latent space.
-            text_embedding_dim (int): The dimension of the text embedding.
-            output_shape (tuple): The shape of the output image.
+            latent_dim (int): Dimension of the latent space.
+            text_embedding_dim (int): Dimension of the text embedding.
+            output_shape (tuple): Shape of the output image.
         """
         self.latent_dim = latent_dim
         self.text_embedding_dim = text_embedding_dim
@@ -42,11 +43,10 @@ class Generator:
         self.model = self.build_model()
 
     def build_model(self):
-        """
-        Builds the generator model.
+        """Builds the generator model.
 
         Returns:
-            tf.keras.Model: The generator model.
+            keras.models.Model: Generator model.
         """
 
         # Inputs
@@ -78,28 +78,24 @@ class Generator:
         return model
 
     def summary(self):
-        """
-        Prints a summary of the generator model.
-        """
+        """Prints a summary of the generator model."""
         return self.model.summary()
 
     def predict(self, x_input):
-        """
-        Generates an output image given an input.
+        """Generates an output image given an input.
 
         Args:
             x_input: The input to the generator model.
 
         Returns:
-            The generated output image.
+            numpy.ndarray: The generated output image.
         """
         return self.model.predict(x_input)
 
     def save(self, filename):
-        """
-        Saves the generator model to a file.
+        """Saves the generator model to a file.
 
         Args:
-            filename (str): The name of the file to save the model to.
+            filename (str): Name of the file to save the model to.
         """
         self.model.save(filename)
