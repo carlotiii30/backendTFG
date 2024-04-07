@@ -1,4 +1,15 @@
-from keras.layers import Conv2D, Flatten, Dropout, LeakyReLU, Dense, Input, Concatenate
+import numpy as np
+from keras.layers import (
+    Conv2D,
+    Flatten,
+    Dropout,
+    LeakyReLU,
+    Dense,
+    Input,
+    Concatenate,
+    Reshape,
+    RepeatVector,
+)
 from keras.models import Model
 from keras.optimizers import Adam
 
@@ -35,8 +46,17 @@ class Discriminator:
         input_image = Input(shape=self.input_shape)
         conditional_input = Input(shape=(self.text_embedding_dim,))
 
+        # Flatten the conditional input before passing it to RepeatVector
+        conditional_input_flattened = Flatten()(conditional_input)
+        conditional_input_repeated = RepeatVector(int(np.prod(self.input_shape[:-1])))(
+            conditional_input_flattened
+        )
+        conditional_input_repeated = Reshape(
+            self.input_shape[:-1] + (self.text_embedding_dim,)
+        )(conditional_input_repeated)
+
         # Concatenate the input image and conditional input
-        combined_input = Concatenate()([input_image, conditional_input])
+        combined_input = Concatenate()([input_image, conditional_input_repeated])
 
         # Convolutional layers
         x = Conv2D(64, kernel_size=3, padding="same")(combined_input)
