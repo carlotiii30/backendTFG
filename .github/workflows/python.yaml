@@ -24,8 +24,8 @@ jobs:
         - name: Install dependencies
           run: make install
 
-        - name: Update dependencies
-          run: make update
+        - name: Check format
+          run: make check_format
 
         - name: Download 'punkt'
           run: python -c 'import nltk; nltk.download("punkt")'

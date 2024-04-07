@@ -16,8 +16,8 @@ requirements: ## Generate requirements file
 install: ## Install dependencies
 	pip install -r requirements.txt
 
-update: ## Update dependencies
-	pip install --upgrade -r requirements.txt
-
 format: ## Format code
 	black src test
+
+check_format: ## Check code format
+	black --check src test

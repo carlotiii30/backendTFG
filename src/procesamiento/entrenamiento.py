@@ -42,20 +42,28 @@ class Training:
         return X, y
 
     @staticmethod
-    def load_fake_data(n_samples):
+    def generate_fake_data(generator, condition, n_samples):
         """
-        Generate fake data samples.
+        Generate fake data with a conditional generator.
 
         Args:
-            n_samples: The number of fake data samples to generate.
+            generator: The conditional generator model.
+            condition: The condition to use when generating the fake data.
+            n_samples: The number of samples to generate.
 
         Returns:
-            The fake data samples and their corresponding labels.
+            The generated fake samples and their corresponding labels.
         """
-        X = np.random.rand(n_samples, 32, 32, 3)
-        X = -1 + X * 2
+        # Genera un vector de ruido aleatorio
+        z_noise = np.random.normal(0, 1, (n_samples, generator.latent_dim))
+
+        # Genera las imágenes falsas a partir del ruido y la condición
+        images = generator.predict([z_noise, np.repeat(condition, n_samples, axis=0)])
+
+        # Crea las etiquetas para las imágenes falsas
         y = np.zeros((n_samples, 1))
-        return X, y
+
+        return images, y
 
     @staticmethod
     def train_step(model, X, y):
@@ -74,7 +82,9 @@ class Training:
         return acc
 
     @staticmethod
-    def train_discriminator(discriminator, dataset, condition, n_iter=20, n_batch=128):
+    def train_discriminator(
+        self, discriminator, dataset, condition, n_iter=20, n_batch=128
+    ):
         """
         Train the discriminator model.
 
@@ -91,15 +101,17 @@ class Training:
         half_batch = int(n_batch / 2)
 
         for i in range(n_iter):
-            X_real, y_real = Training.load_real_data(dataset, half_batch)
+            # Carga y prepara los datos reales
+            X_real, y_real = self.load_real_data(dataset, half_batch)
             # Agrega la condición a los datos reales
-            X_real = np.concatenate([X_real, condition], axis=1)
-            real_acc = Training.train_step(discriminator.model, X_real, y_real)
+            X_real = [X_real, np.repeat(condition, half_batch, axis=0)]
+            real_acc = self.train_step(discriminator.model, X_real, y_real)
 
-            X_fake, y_fake = Training.load_fake_data(half_batch)
+            # Genera y prepara los datos falsos
+            X_fake, y_fake = self.generate_fake_data(half_batch)
             # Agrega la condición a los datos falsos
-            X_fake = np.concatenate([X_fake, condition], axis=1)
-            fake_acc = Training.train_step(discriminator.model, X_fake, y_fake)
+            X_fake = [X_fake, np.repeat(condition, half_batch, axis=0)]
+            fake_acc = self.train_step(discriminator.model, X_fake, y_fake)
 
             print(
                 f"Epoch: {i + 1}, Real Accuracy: {real_acc * 100}, Fake Accuracy: {fake_acc * 100}, Condition: {condition}"
